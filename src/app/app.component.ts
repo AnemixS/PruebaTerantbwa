@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CarService } from './car.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,30 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.sass']
 })
 export class AppComponent {
-  title = 'carList';
+  cars: any[] = [];
+  selectedCar: any = {};
+  
+  constructor(
+    public carServices: CarService
+    ) {
+      
+    }
+      
+    ngOnInit() {
+      this.carServices.getCars()
+      .subscribe(
+        (data) => {
+          this.cars = data['vehicles'];
+      },
+      (error) => {
+        console.log(error);
+      }
+      )
+    }
+
+    details(id){
+      this.selectedCar = this.cars.filter((car)  => {
+        return car.vehicleID === id
+      })[0]
+    }
 }
